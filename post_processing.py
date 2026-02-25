@@ -3,6 +3,41 @@ import librosa
 import librosa.display
 import soundfile as sf
 from pedalboard import Pedalboard, Distortion, Gain, Bitcrush, Clipping
+import math
+
+def random_n_steps(min_steps,max_steps,zero_prob):
+    if np.random.rand() < zero_prob:
+        return 0
+    else:
+        while True:
+            n = np.random.uniform(min_steps, max_steps)
+            if n != 0.0:
+                return n
+
+def pitch_switch(audio,sr,n_steps=2,bins_octave=6):
+    effected = np.copy(audio)
+    return librosa.effects.pitch_shift(effected,sr=sr,n_steps=n_steps,bins_per_octave=bins_octave,res_type='linear')
+
+def pitch_contour(audio,sr,num_pitches=50,zero_prob=0.2, bins_octave=24):
+    f0, voicing, voicing_probability = librosa.pyin(y=audio, sr=sr, fmin=50, fmax=300)
+    effected = np.copy(audio)
+    n=math.trunc(len(audio)/num_pitches)
+    for i in range(num_pitches):
+        start = n * i
+        end = n * (i + 1)
+        # Pitch shift del segment
+        n_steps = random_n_steps(0, 1, zero_prob=zero_prob)
+        effected[start:end] = librosa.effects.pitch_shift(
+            effected[start:end],
+            sr=sr,
+            n_steps=n_steps,
+            bins_per_octave=bins_octave,
+            res_type='soxr_vhq' # Can be changed: 'soxr_vhq' (very high-quality FFT bandlimited), 'soxr_hq' (high-quality FFT bandlimited, default), 'soxr_mq' (medium-quality FFT bandlimited), 
+                                #'soxr_lq' (low-quality FFT bandlimited), 'soxr_qq' (quick cubic, very fast, not bandlimited), 'kaiser_best' (resampy high-quality), 'kaiser_fast' (resampy faster), 
+                                #'fft' / 'scipy' (Fourier resampling via scipy), 'polyphase' (fast polyphase filtering), 'linear' (very fast linear interpolation, not bandlimited), 'zero_order_hold' 
+                                #(fast sample hold, not bandlimited), 'sinc_best' / 'sinc_medium' / 'sinc_fastest' (high/medium/low-quality bandlimited sinc interpolation).
+        )
+    return effected
 
 def distortion(audio,sr, drive_db=20):  # drive_db= Amplification of input signal before being processed by the distortion (intensity of the effect)
     # Distortion: Applies a non-linear (hyperbolic tangent tanh) waveshaping function to apply harmonically pleasing distortion to a signal
@@ -41,14 +76,18 @@ def clipping(audio,sr, offset_db=7):  # Offset_db: 0 (no clipping), clipping inc
     return effected.T 
 
 # Load audio
-audio_name="gen_2.wav"
+audio_name="w3_cold_expresiveness.wav"
 y, sr = librosa.load("Generated/"+audio_name, sr=None)
 
 # Shift formants
+y_pitch_c = pitch_contour(y,sr)
+y_pitch_s = pitch_switch(y,sr)
 y_dist = distortion(y,sr)
 y_bitcrush = bitcrush(y,sr)
 y_clip = clipping(y,sr)
 # Save generated audios
+sf.write("Generated/Post-processing/pitch_c_"+audio_name, y_pitch_c, sr)
+sf.write("Generated/Post-processing/pitch_s_"+audio_name, y_pitch_s, sr)
 sf.write("Generated/Post-processing/distorted_"+audio_name, y_dist, sr)
-sf.write("Generated/Post-processing/bitcrush"+audio_name, y_bitcrush, sr)
-sf.write("Generated/Post-processing/clipping"+audio_name, y_clip, sr)
+sf.write("Generated/Post-processing/bitcrush_"+audio_name, y_bitcrush, sr)
+sf.write("Generated/Post-processing/clipping_"+audio_name, y_clip, sr)
