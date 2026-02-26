@@ -2,11 +2,7 @@
 
 DT2112 Speech Technology Project: Hallmarking a robot voice
 
-**Authors**: 
-* BERTA JANSAT BALLARÍN, KTH Royal Institute of Technology, Sweden
-* FREDRIKA LUNDQVIST ÅBRINK, KTH Royal Institute of Technology, Sweden
-* DAVID MARZBAN, KTH Royal Institute of Technology, Sweden
-* FELIX ÖLANDER, Stockholm University, Sweden
+**Authors**: BERTA JANSAT BALLARÍN, FREDRIKA LUNDQVIST ÅBRINK, DAVID MARZBAN, FELIX ÖLANDER
 
 ## Setup
 
