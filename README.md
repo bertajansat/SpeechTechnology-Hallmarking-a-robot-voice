@@ -2,6 +2,14 @@
 
 DT2112 Speech Technology Project: Hallmarking a robot voice
 
+**Authors**: 
+* BERTA JANSAT BALLARÍN, KTH Royal Institute of Technology, Sweden
+* FREDRIKA LUNDQVIST ÅBRINK, KTH Royal Institute of Technology, Sweden
+* DAVID MARZBAN, KTH Royal Institute of Technology, Sweden
+* FELIX ÖLANDER, Stockholm University, Sweden
+
+## Setup
+
 1. Create conda environment:
 ```
 conda create -n xcodec2 python=3.10.19
@@ -21,3 +29,5 @@ conda activate xcodec2
    * ``: --> add everything? or just the ones used in the final file?
 * `save_dataset.py` : File for downloading selected files from AbstractTTS/PODCAST Dataset (https://huggingface.co/datasets/AbstractTTS/PODCAST) 
 * `Generated_audios/` : Folder containing the audio files generated using Llasa TTS with a given speech prompt from the PODCAST Dataset and a given text prompt. Each of the folders inside `Generated_audios/` contains  different versions of the generated audio files, after applying post-processing.
+
+
