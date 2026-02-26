@@ -9,3 +9,8 @@ conda activate xcodec2
 
 ```
 2. Install requirements on "requirements.txt"
+
+## Structure of the repository
+
+<Llasa.py> : File for TTS generation using llasa-3b-tts (Ref: https://huggingface.co/blog/srinivasbilla/llasa-tts) 
+<post_processing.py> : File for applying post-processing on the generated audios, using librosa (https://librosa.org/doc/latest/index.html) and pedalboard (https://github.com/spotify/pedalboard)
