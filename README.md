@@ -1,4 +1,4 @@
-# Speech Technology
+# Hallmarking a robot voice
 
 DT2112 Speech Technology Project: Hallmarking a robot voice
 
