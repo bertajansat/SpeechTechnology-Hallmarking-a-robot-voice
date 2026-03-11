@@ -16,7 +16,7 @@ mushra-listening-test/
 
 ## 1. Add Your Audio Files
 
-Drop your WAV files into the same folder as `index.html`. Then update the `src` paths in the JSON config block inside `index.html`:
+Drop your WAV files into the audio folder. Then update the `src` paths in the JSON config block inside `index.html`:
 
 ```json
 "reference": { "label": "Reference", "src": "ref.wav" },
