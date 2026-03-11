@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUSHRA Listening Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #f5f4f0;
+  --surface:   #ffffff;
+  --surface2:  #f0efe9;
+  --border:    #e0ddd4;
+  --text:      #1a1916;
+  --muted:     #7a7770;
+  --accent:    #2a52d4;
+  --accent-bg: #eef1fc;
+  --accent-dk: #1e3fa8;
+  --bad:       #c94040;
+  --poor:      #c97030;
+  --fair:      #b09020;
+  --good:      #3a9060;
+  --excellent: #2a52d4;
+  --slider:    #8b7457;
+  --radius:    10px;
+  --shadow:    0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.05);
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Top bar ── */
+#topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 1rem;
+}
+
+#topbar-title {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-shrink: 0;
+}
+
+#progress-label {
+  font-size: .78rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+
+#progress-bar-outer {
+  width: 160px;
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+#progress-bar-inner {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+}
+
+#vol-wrap {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-shrink: 0;
+}
+
+#vol-icon {
+  font-size: .82rem;
+  color: var(--muted);
+  user-select: none;
+}
+
+#vol-slider {
+  width: 80px;
+  height: 4px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* ── Main layout ── */
+#main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 1rem 4rem;
+}
+
+.page-card {
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 880px;
+  padding: 2.5rem 3rem;
+  animation: fadeUp .28s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Page header ── */
+.page-type-badge {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px solid #c5cfee;
+  border-radius: 20px;
+  padding: .22rem .75rem;
+  margin-bottom: .9rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin-bottom: .6rem;
+}
+
+.page-content {
+  color: var(--muted);
+  font-size: .91rem;
+  line-height: 1.65;
+  margin-bottom: 1.75rem;
+}
+
+/* ── Reference row ── */
+.ref-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 1.25rem;
+  padding: .75rem 1rem;
+  background: var(--surface2);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+}
+
+.ref-label {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Scale header ── */
+.scale-header {
+  display: grid;
+  grid-template-columns: 170px 1fr 56px;
+  align-items: center;
+  margin-bottom: .35rem;
+  padding: 0 .2rem;
+}
+
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.scale-lbl {
+  font-size: .67rem;
+  color: var(--muted);
+  text-align: center;
+  flex: 1;
+  line-height: 1.3;
+}
+
+/* ── Sample rows ── */
+.samples-list {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-bottom: .5rem;
+}
+
+.sample-row {
+  display: grid;
+  grid-template-columns: 170px 1fr 56px;
+  align-items: center;
+  gap: .75rem;
+  background: var(--surface2);
+  border-radius: var(--radius);
+  padding: .8rem 1rem;
+  border: 1.5px solid transparent;
+  transition: border-color .15s, background .15s;
+}
+
+.sample-row:hover { border-color: var(--border); }
+.sample-row.playing { background: var(--accent-bg); border-color: #c5cfee; }
+
+/* ── Play buttons ── */
+.play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  padding: .4rem .8rem;
+  font-family: 'Sora', sans-serif;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text);
+  transition: all .15s;
+  white-space: nowrap;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.play-btn:hover   { border-color: var(--accent); color: var(--accent); }
+.play-btn.active  { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+.play-btn.ref-active { border-color: var(--accent-dk); color: var(--accent-dk); background: #dde3f7; }
+
+.play-icon { font-size: .72rem; }
+
+.play-count {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .67rem;
+  color: var(--muted);
+  background: rgba(0,0,0,.06);
+  border-radius: 10px;
+  padding: .1rem .38rem;
+  min-width: 22px;
+  text-align: center;
+}
+
+/* ── Sliders ── */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  background: var(--border);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--slider);
+  border: 3px solid white;
+  box-shadow: 0 0 0 1.5px var(--slider), 0 2px 6px rgba(139,116,87,.2);
+  margin-top: -7px;
+  transition: transform .1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--slider); border: 3px solid white;
+  box-shadow: 0 0 0 1.5px var(--slider); cursor: pointer;
+}
+
+.score-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--slider);
+  text-align: right;
+  min-width: 32px;
+}
+
+/* ── Info note ── */
+.info-note {
+  display: flex;
+  gap: .65rem;
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  border-radius: var(--radius);
+  padding: .75rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: .83rem;
+  color: #78350f;
+  line-height: 1.55;
+}
+.info-note-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: .05rem;
+}
+
+/* ── Warning ── */
+.must-play-warn {
+  font-size: .76rem;
+  color: var(--bad);
+  margin-top: .5rem;
+  display: none;
+  padding: .45rem .75rem;
+  background: #fef2f2;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+}
+.must-play-warn.show { display: block; }
+
+/* ── Footer nav ── */
+.page-footer {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .58rem 1.35rem;
+  border-radius: 8px;
+  font-family: 'Sora', sans-serif;
+  font-size: .86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  border: none;
+}
+
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-dk); }
+.btn-outline { background: white; color: var(--text); border: 1.5px solid var(--border); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+.status-pill {
+  font-size: .76rem;
+  font-weight: 600;
+  padding: .28rem .75rem;
+  border-radius: 20px;
+  margin-left: auto;
+}
+.pill-incomplete { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.pill-complete   { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+
+/* ── Generic page ── */
+.generic-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--accent-bg); border: 1px solid #c5cfee;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 1.25rem;
+}
+
+/* ── Finish page ── */
+.finish-check {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: #d1fae5; border: 1px solid #a7f3d0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; margin: 0 auto 1.5rem;
+}
+
+.results-section { margin-top: 1.5rem; }
+
+.results-group-title {
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: .5rem;
+  margin-top: 1.25rem;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .83rem;
+}
+
+.results-table th {
+  text-align: left;
+  padding: .45rem .7rem;
+  background: var(--surface2);
+  border-bottom: 1.5px solid var(--border);
+  font-size: .72rem;
+  letter-spacing: .04em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.results-table td {
+  padding: .5rem .7rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.results-table tr:last-child td { border-bottom: none; }
+
+.bar-cell { width: 130px; }
+.bar-bg { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; }
+
+.hidden-ref-tag {
+  font-size: .68rem; font-weight: 600;
+  background: #fef3c7; color: #92400e;
+  border: 1px solid #fde68a;
+  border-radius: 10px; padding: .1rem .45rem;
+}
+
+/* ── Save status / download ── */
+.save-status {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .8rem; padding: .35rem .8rem; border-radius: 6px;
+}
+.save-ok      { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+.save-fail    { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.save-pending { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+
+.action-row { display: flex; gap: .75rem; margin-top: 1.25rem; flex-wrap: wrap; align-items: center; }
+
+.dl-btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .55rem 1.2rem; background: #1a1916; color: white;
+  border: none; border-radius: 8px;
+  font-family: 'Sora', sans-serif; font-size: .84rem; font-weight: 600;
+  cursor: pointer; transition: background .15s;
+}
+.dl-btn:hover { background: #333; }
+
+/* ── Demographics ── */
+.demo-group {
+  margin-bottom: 1.4rem;
+}
+.demo-group-label {
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: .6rem;
+  display: block;
+}
+.demo-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+.demo-option input[type="radio"] { display: none; }
+.demo-option label {
+  display: inline-block;
+  padding: .42rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-size: .83rem;
+  cursor: pointer;
+  background: var(--surface);
+  color: var(--muted);
+  transition: all .15s;
+  user-select: none;
+}
+.demo-option label:hover { border-color: var(--slider); color: var(--slider); }
+.demo-option input[type="radio"]:checked + label {
+  border-color: var(--slider);
+  background: #f4ede5;
+  color: var(--slider);
+  font-weight: 600;
+}
+
+/* ── Toast ── */
+#toast {
+  position: fixed; bottom: 1.75rem; right: 1.75rem;
+  background: #1a1916; color: white;
+  padding: .65rem 1.2rem; border-radius: 10px;
+  font-size: .82rem; font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0,0,0,.18);
+  transform: translateY(8px); opacity: 0;
+  transition: all .22s; pointer-events: none; z-index: 999;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .page-card { padding: 1.5rem 1.1rem; }
+  .sample-row, .scale-header { grid-template-columns: 100px 1fr 44px; gap: .5rem; }
+  #progress-bar-outer { width: 80px; }
+}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <span id="topbar-title">Loading…</span>
+  <div id="vol-wrap">
+    <span id="vol-icon">🔈</span>
+    <input id="vol-slider" type="range" min="0" max="2" step="0.01" value="1">
+  </div>
+  <div id="progress-wrap">
+    <span id="progress-label">1 / 1</span>
+    <div id="progress-bar-outer"><div id="progress-bar-inner" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div id="main"></div>
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     ▼▼▼  EDIT YOUR TEST CONFIG HERE  ▼▼▼
+     ════════════════════════════════════════════════════════════════ -->
+<script id="cfg" type="application/json">
+{
+  "testname":             "Voice Perception Study",
+  "testId":               "uncanny_valley",
+  "showButtonPreviousPage": true,
+  "remoteService":        "https://script.google.com/macros/s/AKfycbyjRyYTy1foX8EH61lU46Sqs3BEcJ8hpLAPB90MmBlBgeJYPq3rEPxmKtPkd5grz7OD/exec",
+
+  "pages": [
+    {
+      "type": "consent",
+      "name": "Participant Information & Consent"
+    },
+
+    {
+      "type": "demographics",
+      "name": "About You"
+    },
+
+    {
+      "type":    "generic",
+      "name":    "Introduction",
+      "content": "Welcome. You will listen to a reference voice and several speech samples. Please rate each sample on the 0–100 scale provided, using the reference as your benchmark. Listen to each sample as many times as you need before rating. <strong>You must play the reference and every sample at least once before moving on.</strong>"
+    },
+
+    {
+      "type":      "mushra",
+      "name":      "Human-likeness",
+      "id":        "human_likeness",
+      "content":   "Rate how <strong>human-like</strong> each voice sounds compared to the reference.",
+      "randomize": true,
+      "reference": { "label": "Reference", "src": "audio/surprised_complain_woman_REF.wav" },
+      "stimuli": [
+        { "id": "S1",  "label": "Sample A",         "condition": "min",       "src": "audio/FlangerPitch_MIN_LEVEL_surprised_complain_woman.wav",        "isHiddenRef": false },
+        { "id": "S2",  "label": "Sample B",         "condition": "med",       "src": "audio/FlangerPitch_MEDIUM_LEVEL_surprised_complain_woman.wav",     "isHiddenRef": false },
+        { "id": "S3",  "label": "Sample C",         "condition": "max",       "src": "audio/FlangerPitch_MAX_LEVEL_surprised_complain_woman.wav",         "isHiddenRef": false },
+        { "id": "REF", "label": "Hidden Reference", "condition": "reference", "src": "audio/surprised_complain_woman_REF.wav",                           "isHiddenRef": true  }
+      ]
+    },
+
+    {
+      "type":      "mushra",
+      "name":      "Likability",
+      "id":        "likability",
+      "content":   "Rate how <strong>likable</strong> each voice sounds compared to the reference.",
+      "randomize": true,
+      "reference": { "label": "Reference", "src": "audio/surprised_complain_woman_REF.wav" },
+      "stimuli": [
+        { "id": "S1",  "label": "Sample A",         "condition": "min",       "src": "audio/FlangerPitch_MIN_LEVEL_surprised_complain_woman.wav",        "isHiddenRef": false },
+        { "id": "S2",  "label": "Sample B",         "condition": "med",       "src": "audio/FlangerPitch_MEDIUM_LEVEL_surprised_complain_woman.wav",     "isHiddenRef": false },
+        { "id": "S3",  "label": "Sample C",         "condition": "max",       "src": "audio/FlangerPitch_MAX_LEVEL_surprised_complain_woman.wav",         "isHiddenRef": false },
+        { "id": "REF", "label": "Hidden Reference", "condition": "reference", "src": "audio/surprised_complain_woman_REF.wav",                           "isHiddenRef": true  }
+      ]
+    },
+
+    {
+      "type":      "mushra",
+      "name":      "Eeriness",
+      "id":        "eeriness",
+      "content":   "Rate how <strong>eerie</strong> each voice sounds compared to the reference.",
+      "note":      "<strong>Note:</strong> Unlike human-likeness or likability, the reference anchors the low end of this scale rather than the top. Rate each sample on how eerie it sounds, the unmanipulated reference would naturally score low on this scale.",
+      "randomize": true,
+      "reference": { "label": "Reference", "src": "audio/surprised_complain_woman_REF.wav" },
+      "stimuli": [
+        { "id": "S1",  "label": "Sample A",         "condition": "min",       "src": "audio/FlangerPitch_MIN_LEVEL_surprised_complain_woman.wav",        "isHiddenRef": false },
+        { "id": "S2",  "label": "Sample B",         "condition": "med",       "src": "audio/FlangerPitch_MEDIUM_LEVEL_surprised_complain_woman.wav",     "isHiddenRef": false },
+        { "id": "S3",  "label": "Sample C",         "condition": "max",       "src": "audio/FlangerPitch_MAX_LEVEL_surprised_complain_woman.wav",         "isHiddenRef": false },
+        { "id": "REF", "label": "Hidden Reference", "condition": "reference", "src": "audio/surprised_complain_woman_REF.wav",                           "isHiddenRef": true  }
+      ]
+    },
+
+    {
+      "type":      "mushra",
+      "name":      "Emotional Naturalness",
+      "id":        "emotional_naturalness",
+      "content":   "Rate how <strong>emotionally natural</strong> each voice sounds compared to the reference.",
+      "randomize": true,
+      "reference": { "label": "Reference", "src": "audio/surprised_complain_woman_REF.wav" },
+      "stimuli": [
+        { "id": "S1",  "label": "Sample A",         "condition": "min",       "src": "audio/FlangerPitch_MIN_LEVEL_surprised_complain_woman.wav",        "isHiddenRef": false },
+        { "id": "S2",  "label": "Sample B",         "condition": "med",       "src": "audio/FlangerPitch_MEDIUM_LEVEL_surprised_complain_woman.wav",     "isHiddenRef": false },
+        { "id": "S3",  "label": "Sample C",         "condition": "max",       "src": "audio/FlangerPitch_MAX_LEVEL_surprised_complain_woman.wav",         "isHiddenRef": false },
+        { "id": "REF", "label": "Hidden Reference", "condition": "reference", "src": "audio/surprised_complain_woman_REF.wav",                           "isHiddenRef": true  }
+      ]
+    },
+
+    {
+      "type":      "mushra",
+      "name":      "Robotic",
+      "id":        "robotic",
+      "content":   "Rate how <strong>robotic</strong> each voice sounds compared to the reference.",
+      "note":      "<strong>Note:</strong> Unlike human-likeness or likability, the reference anchors the low end of this scale rather than the top. Rate each sample on how robotic it sounds, the unmanipulated reference would naturally score low on this scale.",
+      "randomize": true,
+      "reference": { "label": "Reference", "src": "audio/surprised_complain_woman_REF.wav" },
+      "stimuli": [
+        { "id": "S1",  "label": "Sample A",         "condition": "min",       "src": "audio/FlangerPitch_MIN_LEVEL_surprised_complain_woman.wav",        "isHiddenRef": false },
+        { "id": "S2",  "label": "Sample B",         "condition": "med",       "src": "audio/FlangerPitch_MEDIUM_LEVEL_surprised_complain_woman.wav",     "isHiddenRef": false },
+        { "id": "S3",  "label": "Sample C",         "condition": "max",       "src": "audio/FlangerPitch_MAX_LEVEL_surprised_complain_woman.wav",         "isHiddenRef": false },
+        { "id": "REF", "label": "Hidden Reference", "condition": "reference", "src": "audio/surprised_complain_woman_REF.wav",                           "isHiddenRef": true  }
+      ]
+    },
+
+    {
+      "type":        "finish",
+      "name":        "Thank You",
+      "content":     "Thank you for participating. Your responses have been recorded.",
+      "showResults": false
+    }
+  ]
+}
+</script>
+<!-- ▲▲▲  END CONFIG  ▲▲▲ -->
+
+<script>
+'use strict';
+
+/* ── utils ──────────────────────────────────────────────────── */
+const $   = id => document.getElementById(id);
+const mk  = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; };
+const shuffle = a => { const b = [...a]; for (let i = b.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; };
+const uuid4 = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random()*16|0; return (c==='x'?r:(r&0x3|0x8)).toString(16); });
+
+function toast(msg, ms=2800) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), ms);
+}
+
+function scoreColor(v) {
+  v = +v;
+  if (v < 20) return 'var(--bad)';
+  if (v < 40) return 'var(--poor)';
+  if (v < 60) return 'var(--fair)';
+  if (v < 80) return 'var(--good)';
+  return 'var(--excellent)';
+}
+
+function paintSlider(slider) {
+  const v = slider.value;
+  slider.style.background = `linear-gradient(to right,var(--slider) 0%,var(--slider) ${v}%,var(--border) ${v}%,var(--border) 100%)`;
+}
+
+/* ── state ───────────────────────────────────────────────────── */
+const CFG        = JSON.parse($('cfg').textContent);
+const SESSION    = uuid4();
+let   CUR_PAGE   = 0;
+const RESULTS    = {};          // { pageId: { stimId: score } }
+const DEMOGRAPHICS = {};        // { age, education, native_english }
+const PLAY_CNT   = {};          // { "pageIdx_stimId": n }
+const PAGE_ORDER = {};          // { pageIdx: [stim,...] }  — randomised once per page
+const PAGE_TIMES = {};          // { pageIdx: { elapsed, lastStart } }
+let   CUR_AUDIO  = null;
+let   CUR_BTN_ID = null;
+let   CUR_ROW_ID = null;
+let   AUDIO_CTX  = null;
+let   GAIN_NODE  = null;
+
+function ensureAudioCtx() {
+  if (!AUDIO_CTX) {
+    AUDIO_CTX = new (window.AudioContext || window.webkitAudioContext)();
+    GAIN_NODE = AUDIO_CTX.createGain();
+    GAIN_NODE.connect(AUDIO_CTX.destination);
+  }
+  if (AUDIO_CTX.state === 'suspended') AUDIO_CTX.resume();
+  GAIN_NODE.gain.value = +$('vol-slider').value;
+  return { ctx: AUDIO_CTX, gain: GAIN_NODE };
+}
+
+/* ── boot ────────────────────────────────────────────────────── */
+$('topbar-title').textContent = CFG.testname;
+$('vol-slider').addEventListener('input', () => {
+  if (GAIN_NODE) GAIN_NODE.gain.value = +$('vol-slider').value;
+});
+go(0);
+
+/* ── navigation ──────────────────────────────────────────────── */
+function go(idx) {
+  stopAudio();
+  // Accumulate time spent on the page we're leaving
+  if (PAGE_TIMES[CUR_PAGE]) {
+    PAGE_TIMES[CUR_PAGE].elapsed += Date.now() - PAGE_TIMES[CUR_PAGE].lastStart;
+  }
+  CUR_PAGE = idx;
+  // Start timing the new page
+  if (!PAGE_TIMES[idx]) PAGE_TIMES[idx] = { elapsed: 0 };
+  PAGE_TIMES[idx].lastStart = Date.now();
+  const page  = CFG.pages[idx];
+  const total = CFG.pages.length;
+
+  $('progress-label').textContent     = `${idx+1} / ${total}`;
+  $('progress-bar-inner').style.width = `${((idx+1)/total)*100}%`;
+
+  const main = $('main');
+  main.innerHTML = '';
+
+  if      (page.type === 'consent')      main.appendChild(buildConsent(page, idx));
+  else if (page.type === 'demographics') main.appendChild(buildDemographics(page, idx));
+  else if (page.type === 'generic')      main.appendChild(buildGeneric(page, idx));
+  else if (page.type === 'mushra')       main.appendChild(buildMushra(page, idx));
+  else if (page.type === 'finish')       main.appendChild(buildFinish(page, idx));
+}
+
+/* ── generic page ─────────────────────────────────────────────── */
+function buildGeneric(page, idx) {
+  const card = mk('div','page-card');
+  card.innerHTML = `
+    <div class="generic-icon">📋</div>
+    <span class="page-type-badge">Information</span>
+    <h1 class="page-title">${page.name}</h1>
+    <p class="page-content">${page.content}</p>`;
+  card.appendChild(makeFooter(idx, () => true));
+  return card;
+}
+
+/* ── consent page ────────────────────────────────────────────── */
+function buildConsent(page, idx) {
+  const card = mk('div','page-card');
+  card.innerHTML = `
+    <div class="generic-icon">📋</div>
+    <span class="page-type-badge">Participant Information</span>
+    <h1 class="page-title">${page.name}</h1>
+    <p class="page-content">This listening test is part of an academic research study on voice perception. You will listen to speech samples and rate them on specific perceptual qualities. The session takes approximately 10–15 minutes.</p>
+    <p class="page-content" style="margin-top:1rem;font-weight:600;color:var(--text)">By participating in this study, you confirm that:</p>
+    <ul style="color:var(--muted);font-size:.91rem;line-height:1.65;margin:.75rem 0 1.5rem 1.5rem;display:flex;flex-direction:column;gap:.35rem">
+      <li>Your participation is voluntary</li>
+      <li>Your responses are anonymous</li>
+      <li>The data will be used only for academic research purposes</li>
+    </ul>
+    <label style="display:flex;align-items:center;gap:.75rem;cursor:pointer;font-size:.91rem;font-weight:600;color:var(--text)">
+      <input type="checkbox" id="consent-check" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;flex-shrink:0">
+      I consent to participate in this study
+    </label>`;
+  card.appendChild(makeFooter(idx, () => {
+    if (!$('consent-check').checked) {
+      toast('⚠ Please confirm your consent before continuing.');
+      return false;
+    }
+    return true;
+  }));
+  return card;
+}
+
+/* ── demographics page ───────────────────────────────────────── */
+function buildDemographics(page, idx) {
+  const card = mk('div','page-card');
+  card.innerHTML = `
+    <div class="generic-icon">👤</div>
+    <span class="page-type-badge">Background</span>
+    <h1 class="page-title">${page.name}</h1>
+    <p class="page-content">Please answer a few brief questions about yourself. Your responses are anonymous and will only be used for research purposes.</p>`;
+
+  const groups = [
+    { key: 'age',            label: 'Age group',
+      options: ['18–29 (Gen Z)', '30–35 (Millennial)', '36–45', '46+'] },
+    { key: 'education',      label: 'Highest level of education completed',
+      options: ['High school', "Bachelor's", "Master's", 'PhD'] },
+    { key: 'native_english', label: 'Are you a native English speaker?',
+      options: ['Yes', 'No'] }
+  ];
+
+  const form = mk('div',''); form.style.marginTop = '1.5rem';
+  groups.forEach(g => {
+    const group = mk('div','demo-group');
+    group.appendChild(mk('span','demo-group-label', g.label));
+    const opts = mk('div','demo-options');
+    g.options.forEach(opt => {
+      const wrapper = mk('div','demo-option');
+      const radio   = mk('input');
+      radio.type = 'radio'; radio.name = `demo-${g.key}`;
+      radio.id   = `demo-${g.key}-${opt.replace(/[^a-z0-9]/gi,'_')}`;
+      radio.value = opt;
+      if (DEMOGRAPHICS[g.key] === opt) radio.checked = true;
+      radio.onchange = () => { DEMOGRAPHICS[g.key] = opt; };
+      const label = mk('label','', opt); label.htmlFor = radio.id;
+      wrapper.appendChild(radio); wrapper.appendChild(label);
+      opts.appendChild(wrapper);
+    });
+    group.appendChild(opts); form.appendChild(group);
+  });
+  card.appendChild(form);
+
+  const warn = mk('p','must-play-warn','⚠ Please answer all questions before continuing.');
+  warn.id = `warn-${idx}`; card.appendChild(warn);
+
+  card.appendChild(makeFooter(idx, () => {
+    if (!['age','education','native_english'].every(k => DEMOGRAPHICS[k])) {
+      $(`warn-${idx}`).classList.add('show');
+      toast('⚠ Please answer all questions.'); return false;
+    }
+    $(`warn-${idx}`).classList.remove('show'); return true;
+  }));
+  return card;
+}
+
+/* ── mushra page ─────────────────────────────────────────────── */
+function buildMushra(page, idx) {
+  const card  = mk('div','page-card');
+  const pageId = page.id;
+
+  // build/retrieve randomised order (stable across back-navigation)
+  if (!PAGE_ORDER[idx]) PAGE_ORDER[idx] = page.randomize ? shuffle(page.stimuli) : [...page.stimuli];
+  const ordered = PAGE_ORDER[idx];
+
+  if (!RESULTS[pageId]) RESULTS[pageId] = {};
+  // default all to 50
+  ordered.forEach(s => { if (RESULTS[pageId][s.id] === undefined) RESULTS[pageId][s.id] = 50; });
+
+  const mIdx   = CFG.pages.slice(0, idx+1).filter(p => p.type==='mushra').length;
+  const mTotal = CFG.pages.filter(p => p.type==='mushra').length;
+
+  card.innerHTML = `
+    <span class="page-type-badge">MUSHRA · ${mIdx} of ${mTotal}</span>
+    <h1 class="page-title">${page.name}</h1>
+    <p class="page-content">${page.content}</p>
+    ${page.note ? `<div class="info-note"><span class="info-note-icon">ℹ</span><span>${page.note}</span></div>` : ''}`;
+
+  // reference row
+  const refRow = mk('div','ref-row');
+  refRow.id = `refrow-${idx}`;
+  const refBtn = mk('button','play-btn');
+  refBtn.id = `refbtn-${idx}`;
+  refBtn.innerHTML = `<span class="play-icon">▶</span>${page.reference.label}
+    <span class="play-count" id="pc-${idx}-REF">${cnt(idx,'REF')}×</span>`;
+  refBtn.onclick = () => playAudio(page.reference.src, refBtn.id, idx, 'REF', refRow.id);
+  refRow.appendChild(refBtn);
+  const refLabel = mk('span','ref-label','Reference Track');
+  refRow.appendChild(refLabel);
+  card.appendChild(refRow);
+
+  // scale header
+  const sh = mk('div','scale-header');
+  sh.innerHTML = `<div></div>
+    <div class="scale-labels">
+      <span class="scale-lbl">Bad<br>0–20</span>
+      <span class="scale-lbl">Poor<br>20–40</span>
+      <span class="scale-lbl">Fair<br>40–60</span>
+      <span class="scale-lbl">Good<br>60–80</span>
+      <span class="scale-lbl">Excellent<br>80–100</span>
+    </div><div></div>`;
+  card.appendChild(sh);
+
+  // sample rows
+  const list = mk('div','samples-list');
+  ordered.forEach((stim, i) => {
+    const letter = String.fromCharCode(65 + i);
+    const row    = mk('div','sample-row');
+    row.id       = `row-${idx}-${stim.id}`;
+
+    const btn = mk('button','play-btn');
+    btn.id = `playbtn-${idx}-${stim.id}`;
+    btn.innerHTML = `<span class="play-icon">▶</span>Sample ${letter}
+      <span class="play-count" id="pc-${idx}-${stim.id}">${cnt(idx,stim.id)}×</span>`;
+    btn.onclick = () => playAudio(stim.src, btn.id, idx, stim.id, row.id);
+
+    const slider = mk('input');
+    slider.type  = 'range'; slider.min = 0; slider.max = 100;
+    slider.value = RESULTS[pageId][stim.id];
+    slider.id    = `sl-${idx}-${stim.id}`;
+    slider.oninput = () => {
+      scoreEl.textContent = slider.value;
+      paintSlider(slider);
+      RESULTS[pageId][stim.id] = +slider.value;
+      refreshPill(idx);
+    };
+    paintSlider(slider);
+
+    const scoreEl = mk('div','score-display', RESULTS[pageId][stim.id]);
+
+    row.appendChild(btn);
+    row.appendChild(slider);
+    row.appendChild(scoreEl);
+    list.appendChild(row);
+  });
+  card.appendChild(list);
+
+  // warning
+  const warn = mk('p','must-play-warn','⚠ Please play the reference and all samples at least once before continuing.');
+  warn.id = `warn-${idx}`;
+  card.appendChild(warn);
+
+  card.appendChild(makeFooter(idx, () => {
+    if (!allPlayed(idx)) { $(`warn-${idx}`).classList.add('show'); toast('⚠ Play every sample before continuing.'); return false; }
+    $(`warn-${idx}`).classList.remove('show'); return true;
+  }));
+
+  return card;
+}
+
+function cnt(pageIdx, stimId) { return PLAY_CNT[`${pageIdx}_${stimId}`] || 0; }
+
+function incCnt(pageIdx, stimId) {
+  const key = `${pageIdx}_${stimId}`;
+  PLAY_CNT[key] = (PLAY_CNT[key]||0) + 1;
+  const el = $(`pc-${pageIdx}-${stimId}`);
+  if (el) el.textContent = PLAY_CNT[key] + '×';
+}
+
+function allPlayed(idx) {
+  const p = CFG.pages[idx];
+  if (!p || p.type !== 'mushra') return true;
+  if (!cnt(idx,'REF')) return false;
+  return p.stimuli.every(s => cnt(idx, s.id) > 0);
+}
+
+function refreshPill(idx) {
+  const pill = $(`pill-${idx}`);
+  if (!pill) return;
+  const ok = allPlayed(idx);
+  pill.textContent = ok ? 'Ready ✓' : 'Not rated';
+  pill.className   = 'status-pill ' + (ok ? 'pill-complete' : 'pill-incomplete');
+}
+
+/* ── finish page ─────────────────────────────────────────────── */
+function buildFinish(page, idx) {
+  const card = mk('div','page-card');
+  card.innerHTML = `
+    <div style="text-align:center;padding:1rem 0 2rem">
+      <div style="font-size:2.5rem;margin-bottom:1.25rem">⏳</div>
+      <span class="page-type-badge">Please wait</span>
+      <h1 class="page-title" style="text-align:center;margin-top:.9rem">Saving your responses…</h1>
+      <p class="page-content" style="text-align:center">Please don't close this window.</p>
+    </div>`;
+  saveToServer(card, page);
+  return card;
+}
+
+function buildResultsSection(page) {
+  const sec = mk('div','results-section');
+  CFG.pages.filter(p => p.type==='mushra').forEach(mp => {
+    const mpIdx = CFG.pages.indexOf(mp);
+    const order = PAGE_ORDER[mpIdx] || mp.stimuli;
+    sec.appendChild(mk('div','results-group-title', mp.name));
+    const table = mk('table','results-table');
+    table.innerHTML = `<thead><tr>
+      <th>Sample</th><th>Score</th><th class="bar-cell">Distribution</th><th>Played</th><th>Note</th>
+    </tr></thead>`;
+    const tbody = mk('tbody');
+    order.forEach((stim, i) => {
+      const score = RESULTS[mp.id]?.[stim.id] ?? '–';
+      const color = typeof score==='number' ? scoreColor(score) : 'var(--border)';
+      const tr = mk('tr');
+      tr.innerHTML = `
+        <td>Sample ${String.fromCharCode(65+i)}</td>
+        <td><strong>${score}</strong></td>
+        <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:${score}%;background:${color}"></div></div></td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:.78rem">${cnt(mpIdx,stim.id)}×</td>
+        <td>${stim.isHiddenRef ? '<span class="hidden-ref-tag">Hidden Ref</span>' : ''}</td>`;
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    sec.appendChild(table);
+  });
+  return sec;
+}
+
+function onSubmitSuccess(card, page) {
+  card.innerHTML = `
+    <div class="finish-check">✓</div>
+    <span class="page-type-badge">Complete</span>
+    <h1 class="page-title" style="text-align:center">${page.name}</h1>
+    <p class="page-content" style="text-align:center">${page.content}</p>`;
+  if (page.showResults !== false) card.appendChild(buildResultsSection(page));
+  const statusWrap = mk('div',''); statusWrap.style.marginTop='1.5rem';
+  statusWrap.innerHTML = `<span class="save-status save-ok">✓ Submitted to Google Sheets</span>`;
+  card.appendChild(statusWrap);
+  const actionRow = mk('div','action-row');
+  const dlBtn = mk('button','dl-btn','⬇ Download CSV');
+  dlBtn.onclick = downloadCSV;
+  actionRow.appendChild(dlBtn);
+  card.appendChild(actionRow);
+}
+
+function onSubmitFailure(card, errorMsg) {
+  const mailHref = `mailto:felix.olander@gmail.com`
+    + `?subject=${encodeURIComponent(`MUSHRA Results — ${CFG.testId}`)}`
+    + `&body=${encodeURIComponent(`Hi Felix,\n\nMy results could not be submitted automatically. Please find the CSV attached.\n\nSession ID: ${SESSION}`)}`;
+
+  card.innerHTML = `
+    <div style="width:72px;height:72px;border-radius:50%;background:#fee2e2;border:1px solid #fecaca;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.5rem">✗</div>
+    <span class="page-type-badge" style="background:#fee2e2;color:#991b1b;border-color:#fecaca">Submission Failed</span>
+    <h1 class="page-title" style="text-align:center;margin-top:.9rem">Couldn't save to Google Sheets</h1>
+    <p class="page-content" style="text-align:center">This is usually caused by an ad blocker or browser privacy setting.</p>
+    <p class="page-content" style="text-align:center;margin-top:.25rem">Please <strong style="color:var(--text)">download your results</strong> and send the file to <strong style="color:var(--text)">felix.olander@gmail.com</strong>.</p>`;
+
+  const actionRow = mk('div','action-row');
+  actionRow.style.cssText = 'justify-content:center;margin-top:1.5rem';
+
+  const dlBtn = mk('button','dl-btn','⬇ Download CSV');
+  dlBtn.onclick = downloadCSV;
+  actionRow.appendChild(dlBtn);
+
+  const mailA = document.createElement('a');
+  mailA.href = mailHref;
+  mailA.style.cssText = 'display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.2rem;background:var(--accent);color:white;border-radius:8px;font-family:Sora,sans-serif;font-size:.84rem;font-weight:600;text-decoration:none;';
+  mailA.textContent = '✉ Open Email';
+  actionRow.appendChild(mailA);
+
+  const note = mk('p','');
+  note.style.cssText = 'font-size:.78rem;color:var(--muted);text-align:center;margin-top:.75rem;width:100%';
+  note.textContent = 'Download the CSV first, then attach it to the email before sending.';
+  actionRow.appendChild(note);
+
+  card.appendChild(actionRow);
+
+  const errDetail = mk('p','');
+  errDetail.style.cssText = 'font-size:.72rem;color:var(--muted);text-align:center;margin-top:1.5rem;font-family:"JetBrains Mono",monospace;';
+  errDetail.textContent = `Error: ${errorMsg}`;
+  card.appendChild(errDetail);
+}
+
+/* ── footer ──────────────────────────────────────────────────── */
+function makeFooter(idx, validateFn) {
+  const footer = mk('div','page-footer');
+  const total  = CFG.pages.length;
+  const page   = CFG.pages[idx];
+
+  if (CFG.showButtonPreviousPage && idx > 0) {
+    const prev = mk('button','btn btn-outline','← Previous');
+    prev.onclick = () => go(idx - 1);
+    footer.appendChild(prev);
+  }
+
+  if (idx < total - 1) {
+    const next = mk('button','btn btn-primary','Continue →');
+    next.onclick = () => { if (validateFn && !validateFn()) return; go(idx+1); };
+    footer.appendChild(next);
+  }
+
+  if (page.type === 'mushra') {
+    const pill = mk('span','status-pill pill-incomplete','Not rated');
+    pill.id = `pill-${idx}`;
+    footer.appendChild(pill);
+  }
+
+  return footer;
+}
+
+/* ── audio ───────────────────────────────────────────────────── */
+
+function clearActiveUI() {
+  document.querySelectorAll('.play-btn.active,.play-btn.ref-active').forEach(b => {
+    b.classList.remove('active','ref-active');
+    const ic = b.querySelector('.play-icon'); if (ic) ic.textContent='▶';
+  });
+  document.querySelectorAll('.sample-row.playing,.ref-row.playing').forEach(r => r.classList.remove('playing'));
+}
+
+function stopAudio() {
+  if (CUR_AUDIO) { CUR_AUDIO.pause(); CUR_AUDIO.currentTime=0; CUR_AUDIO=null; }
+  clearActiveUI();
+  CUR_BTN_ID = null;
+  CUR_ROW_ID = null;
+}
+
+function setPlayingUI(btnId, rowId, stimId) {
+  const btn = $(btnId);
+  const row = $(rowId);
+  const isRef = stimId === 'REF';
+  if (btn) { btn.classList.add(isRef ? 'ref-active' : 'active'); const ic=btn.querySelector('.play-icon'); if(ic) ic.textContent='⏸'; }
+  if (row) row.classList.add('playing');
+}
+
+function setPausedUI(btnId, rowId) {
+  const btn = $(btnId);
+  const row = $(rowId);
+  if (btn) { btn.classList.remove('active','ref-active'); btn.classList.add('paused'); const ic=btn.querySelector('.play-icon'); if(ic) ic.textContent='▶'; }
+  if (row) row.classList.remove('playing');
+}
+
+function playAudio(src, btnId, pageIdx, stimId, rowId) {
+  // --- Case 1: clicking the currently active (playing) button → PAUSE ---
+  if (CUR_AUDIO && !CUR_AUDIO.paused && CUR_BTN_ID === btnId) {
+    CUR_AUDIO.pause();
+    setPausedUI(btnId, rowId);
+    return;
+  }
+
+  // --- Case 2: clicking the currently paused button → RESUME ---
+  if (CUR_AUDIO && CUR_AUDIO.paused && CUR_BTN_ID === btnId) {
+    if (AUDIO_CTX && AUDIO_CTX.state === 'suspended') AUDIO_CTX.resume();
+    CUR_AUDIO.play().catch(() => toast('⚠ Could not resume — check audio path.'));
+    setPlayingUI(btnId, rowId, stimId);
+    return;
+  }
+
+  // --- Case 3: clicking a different button → stop current, start new ---
+  stopAudio();
+
+  if (!src) { toast('⚠ No audio configured for this sample.'); return; }
+
+  const audio = new Audio(src);
+  const { ctx, gain } = ensureAudioCtx();
+  try {
+    const source = ctx.createMediaElementSource(audio);
+    source.connect(gain);
+  } catch(e) { /* already connected */ }
+  CUR_AUDIO   = audio;
+  CUR_BTN_ID  = btnId;
+  CUR_ROW_ID  = rowId;
+
+  setPlayingUI(btnId, rowId, stimId);
+
+  incCnt(pageIdx, stimId);
+  refreshPill(pageIdx);
+
+  audio.play().catch(() => { toast('⚠ Could not play — check audio path.'); stopAudio(); });
+
+  audio.onended = () => {
+    clearActiveUI();
+    CUR_AUDIO  = null;
+    CUR_BTN_ID = null;
+    CUR_ROW_ID = null;
+  };
+}
+
+/* ── results payload ─────────────────────────────────────────── */
+function buildPayload() {
+  const headers = ['session_test_id','session_uuid','dem_age','dem_education','dem_native_english','trial_id','rating_stimulus','rating_condition','rating_score','rating_time','rating_comment'];
+  const dataRows = [];
+  CFG.pages.filter(p => p.type === 'mushra').forEach(p => {
+    const mpIdx   = CFG.pages.indexOf(p);
+    const order   = PAGE_ORDER[mpIdx] || p.stimuli;
+    const elapsed = PAGE_TIMES[mpIdx] ? PAGE_TIMES[mpIdx].elapsed : 0;
+    order.forEach(s => {
+      dataRows.push([
+        CFG.testId,
+        SESSION,
+        DEMOGRAPHICS.age || '',
+        DEMOGRAPHICS.education || '',
+        DEMOGRAPHICS.native_english || '',
+        p.id,
+        s.id,
+        s.condition || '',
+        RESULTS[p.id] && RESULTS[p.id][s.id] !== undefined ? RESULTS[p.id][s.id] : '',
+        elapsed,
+        ''
+      ]);
+    });
+  });
+  return {
+    sheet:     'Results',
+    rows:      [headers, ...dataRows],
+    testId:    CFG.testId,
+    sessionId: SESSION
+  };
+}
+
+/* ── server save ─────────────────────────────────────────────── */
+function saveToServer(card, page) {
+  if (!CFG.remoteService) {
+    onSubmitFailure(card, 'No server configured');
+    return;
+  }
+  fetch(CFG.remoteService, {
+    method: 'POST',
+    body: JSON.stringify(buildPayload())
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data && data.status === 'ok') {
+      onSubmitSuccess(card, page);
+    } else {
+      throw new Error(data && data.message ? data.message : 'unexpected response');
+    }
+  })
+  .catch(e => onSubmitFailure(card, e.message));
+}
+
+/* ── CSV download ────────────────────────────────────────────── */
+function downloadCSV() {
+  const p   = buildPayload();
+  const csv = p.rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href=url; a.download=`${p.testId}_${p.sessionId}.csv`; a.click();
+  URL.revokeObjectURL(url);
+  toast('✓ CSV downloaded');
+}
+</script>
+</body>
+</html>
