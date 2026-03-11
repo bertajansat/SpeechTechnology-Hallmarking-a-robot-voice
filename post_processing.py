@@ -160,11 +160,7 @@ y_vel = speaking_vel(y, sr, v_rate=0.75, quality="low")
 
 y_shift_1 = flanger(y,sr)
 y_shift= pitch_switch(y_shift_1,sr,n_steps=1,bins_octave=12, type='soxr_hq')
-# Save generated audios
-#sf.write("Generated/Post-processing/pitch_c_"+audio_name, y_pitch_c, sr)
-#sf.write("Generated/Post-processing/pitch_s_"+audio_name, y_pitch_s, sr)
-#sf.write("Generated/Post-processing/distorted_"+audio_name, y_dist, sr)
-#sf.write("Generated/Post-processing/bitcrush_"+audio_name, y_bitcrush, sr)
-#sf.write("Generated/Post-processing/clipping_"+audio_name, y_clip, sr)
+
+# Save generated audio
 
 sf.write("Generated_audios/Flanger + Pitch/pitch_1_soxr_hq_NO_"+audio_name, y_shift, sr)
