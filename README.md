@@ -24,6 +24,6 @@ conda activate xcodec2
    * `Distortion` : Apply a non-linear (hyperbolic tangent tanh) waveshaping function to apply harmonically pleasing distortion to a signal.
    * ``: --> add everything? or just the ones used in the final file?
 * `save_dataset.py` : File for downloading selected files from AbstractTTS/PODCAST Dataset (https://huggingface.co/datasets/AbstractTTS/PODCAST) 
-* `Generated_audios/` : Folder containing the audio files generated using Llasa TTS with a given speech prompt from the PODCAST Dataset and a given text prompt. Each of the folders inside `Generated_audios/` contains  different versions of the generated audio files, after applying post-processing.
+* `Generated_audios/` : Folder containing the audio files generated using Llasa TTS with a given speech prompt from the PODCAST Dataset and a given text prompt. The final reference audio used is `reference_audio.wav`. In the folder `Flanger + Pitch`, the three different modified versions of the reference audio can be found.
 
 
