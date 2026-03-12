@@ -1,4 +1,4 @@
-# MUSHRA Listening Test - Voice Perception Study
+# MUSHRA Listening Test
 
 MUSHRA listening test that collects ratings and saves results to Google Sheets.
 
@@ -91,7 +91,7 @@ Set `"remoteService"` in the config to your Google Apps Script web app URL. Resu
 | rating_time | Time spent on page (ms) |
 | rating_comment | Reserved for future use |
 
-### CSV download (always available)
+### CSV download
 Participants can download their results as a CSV directly from the finish page, no server needed.
 
 ---
