@@ -25,5 +25,5 @@ conda activate xcodec2
    * `Pitch shift`: Changing the pitch of an audio signal
 * `save_dataset.py` : File for downloading selected files from AbstractTTS/PODCAST Dataset (https://huggingface.co/datasets/AbstractTTS/PODCAST) 
 * `Generated_audios/` : Folder containing the audio files generated using Llasa TTS with a given speech prompt from the PODCAST Dataset and a given text prompt. The final reference audio used is `reference_audio.wav`. In the folder `Flanger + Pitch`, the three different modified versions of the reference audio can be found.
-
+* `mushra-test`: Folder containing the code for the implementation of the MUSHRA-like listening tests.
 
